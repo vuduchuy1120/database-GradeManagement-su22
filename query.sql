@@ -1,5 +1,4 @@
-﻿
--- SELECT ra total use ORDER BY, INNER JOIN, HAVING, Sub-query
+﻿-- SELECT ra total use ORDER BY, INNER JOIN, HAVING, Sub-query
 SELECT CourseID, sID , sum(tbl1.Weight/100 * Score) as total 
 FROM
 	(SELECT a.*, g.Score, g.sID FROM Assesment a
@@ -9,9 +8,9 @@ HAVING sum(tbl1.Weight/100 * Score) > 7 ORDER BY [sID]
 
 -- Count number student.
 SELECT Count(*) FROM Student
+
 --A query that uses a sub-query in the WHERE clause to display student max age in all student
-SELECT *
-FROM Student st
+SELECT * FROM Student st
 WHERE DOB <= ALL (SELECT DOB FROM Student);
 
 -- A query that uses partial matching in the WHERE clause FIND student firstName have characteristic 'V'
@@ -37,7 +36,7 @@ BEGIN
 	DECLARE @total float(2);
 	SELECT @total = sum(tbl1.Weight/100 * Score)  FROM
 	(SELECT a.*, g.Score, g.sID FROM Assesment a
-	INNER JOIN Grade g on a.AssID = g.AssID ) tbl1 WHERE CourseID = @courseID and sid = @sid;
+	INNER JOIN Grade g on a.AssID = g.AssID) tbl1 WHERE CourseID = @courseID and sid = @sid;
 	UPDATE [View] SET Average = @TOTAL WHERE CourseID = @courseID and sid = @sid;
 	FETCH NEXT FROM update_total_cursor_1 INTO @courseID, @sid
 END
@@ -184,3 +183,5 @@ END
 UPDATE [View] SET Average = 8, [Status] = 'PASSED', Semester ='FALL21' WHERE sID = 'HE111112' AND CourseID = 'MAE101'
 
 SELECT * FROM [View]
+
+CREATE INDEX student_index ON Student (LastName, FirstName)
