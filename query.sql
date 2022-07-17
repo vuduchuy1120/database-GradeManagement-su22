@@ -1,8 +1,28 @@
 ﻿
--- SELECT ra total.
-SELECT CourseID, sID , sum(tbl1.Weight/100 * Score) as total FROM
-(SELECT a.*, g.Score, g.sID FROM Assesment a
-INNER JOIN Grade g on a.AssID = g.AssID ) tbl1 group by sID, CourseID order by sID
+-- SELECT ra total use ORDER BY, INNER JOIN, HAVING, Sub-query
+SELECT CourseID, sID , sum(tbl1.Weight/100 * Score) as total 
+FROM
+	(SELECT a.*, g.Score, g.sID FROM Assesment a
+	INNER JOIN Grade g on a.AssID = g.AssID ) tbl1 
+GROUP BY [sID], CourseID 
+HAVING sum(tbl1.Weight/100 * Score) > 7 ORDER BY [sID]
+
+-- Count number student.
+SELECT Count(*) FROM Student
+--A query that uses a sub-query in the WHERE clause to display student max age in all student
+SELECT *
+FROM Student st
+WHERE DOB <= ALL (SELECT DOB FROM Student);
+
+-- A query that uses partial matching in the WHERE clause FIND student firstName have characteristic 'V'
+SELECT * FROM Student WHERE FirstName LIKE 'V%'
+
+-- A query that uses a self-JOIN to display student same city
+SELECT  s2.Address,	s1.FirstName + ' ' +s1.LastName as fullName,
+s2.FirstName + ' ' +s2.LastName as fullName
+FROM Student s1 
+INNER JOIN Student s2 ON s1.sID > s2.sID  AND s1.Address = s2.Address
+
 
 -- update average
 go
@@ -111,7 +131,7 @@ INNER JOIN Category c on c.CategoryID = cd.CategoryID  GROUP BY CourseID, sID, c
 
 -- test
 GO
-go
+-- procedure calculator sub_total
 CREATE PROC select_sub_total
 AS
 BEGIN
